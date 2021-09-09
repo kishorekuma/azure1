@@ -5,7 +5,7 @@
 		"factoryName": {
 			"value": "adfdevdata"
 		},
-		"ls_storage_connectionString": {
+		"ls_azurestorage_connectionString": {
 			"value": ""
 		}
 	}

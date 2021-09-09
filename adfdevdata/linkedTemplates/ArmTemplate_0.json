@@ -7,9 +7,9 @@
 			"metadata": "Data Factory name",
 			"defaultValue": "adfdevdata"
 		},
-		"ls_storage_connectionString": {
+		"ls_azurestorage_connectionString": {
 			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'ls_storage'"
+			"metadata": "Secure string for 'connectionString' of 'ls_azurestorage'"
 		}
 	},
 	"variables": {
@@ -17,25 +17,25 @@
 	},
 	"resources": [
 		{
-			"name": "[concat(parameters('factoryName'), '/ls_storage')]",
+			"name": "[concat(parameters('factoryName'), '/ls_azurestorage')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"annotations": [],
 				"type": "AzureBlobStorage",
 				"typeProperties": {
-					"connectionString": "[parameters('ls_storage_connectionString')]"
+					"connectionString": "[parameters('ls_azurestorage_connectionString')]"
 				}
 			},
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/ds_sink_data')]",
+			"name": "[concat(parameters('factoryName'), '/ds_sink_adf')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
-					"referenceName": "ls_storage",
+					"referenceName": "ls_azurestorage",
 					"type": "LinkedServiceReference"
 				},
 				"annotations": [],
@@ -52,16 +52,16 @@
 				"schema": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/ls_storage')]"
+				"[concat(variables('factoryId'), '/linkedServices/ls_azurestorage')]"
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/ds_source_data')]",
+			"name": "[concat(parameters('factoryName'), '/ds_source_adf')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
-					"referenceName": "ls_storage",
+					"referenceName": "ls_azurestorage",
 					"type": "LinkedServiceReference"
 				},
 				"annotations": [],
@@ -89,7 +89,7 @@
 				]
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/ls_storage')]"
+				"[concat(variables('factoryId'), '/linkedServices/ls_azurestorage')]"
 			]
 		},
 		{
@@ -145,14 +145,14 @@
 						},
 						"inputs": [
 							{
-								"referenceName": "ds_source_data",
+								"referenceName": "ds_source_adf",
 								"type": "DatasetReference",
 								"parameters": {}
 							}
 						],
 						"outputs": [
 							{
-								"referenceName": "ds_sink_data",
+								"referenceName": "ds_sink_adf",
 								"type": "DatasetReference",
 								"parameters": {}
 							}
@@ -162,8 +162,8 @@
 				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/ds_source_data')]",
-				"[concat(variables('factoryId'), '/datasets/ds_sink_data')]"
+				"[concat(variables('factoryId'), '/datasets/ds_source_adf')]",
+				"[concat(variables('factoryId'), '/datasets/ds_sink_adf')]"
 			]
 		}
 	]

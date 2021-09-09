@@ -7,9 +7,9 @@
 			"metadata": "Data Factory name",
 			"defaultValue": "adfdevdata"
 		},
-		"ls_storage_connectionString": {
+		"ls_azurestorage_connectionString": {
 			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'ls_storage'"
+			"metadata": "Secure string for 'connectionString' of 'ls_azurestorage'"
 		},
 		"containerUri": {
 			"type": "string",
@@ -38,8 +38,8 @@
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
 					},
-					"ls_storage_connectionString": {
-						"value": "[parameters('ls_storage_connectionString')]"
+					"ls_azurestorage_connectionString": {
+						"value": "[parameters('ls_azurestorage_connectionString')]"
 					}
 				}
 			},
