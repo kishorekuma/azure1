@@ -5,8 +5,11 @@
 		"factoryName": {
 			"value": "adfdevdata"
 		},
-		"ls_azurestorage_connectionString": {
-			"value": ""
+		"ls_azureblob_data_properties_typeProperties_connectionString_secretName": {
+			"value": "adfsecret"
+		},
+		"ls_kv_data_properties_typeProperties_baseUrl": {
+			"value": "https://adfkeyvaultdata.vault.azure.net/"
 		}
 	}
 }

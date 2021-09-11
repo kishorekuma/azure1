@@ -7,9 +7,13 @@
 			"metadata": "Data Factory name",
 			"defaultValue": "adfdevdata"
 		},
-		"ls_azurestorage_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'ls_azurestorage'"
+		"ls_kv_data_properties_typeProperties_baseUrl": {
+			"type": "string",
+			"defaultValue": "https://adfkeyvaultdata.vault.azure.net/"
+		},
+		"ls_azureblob_data_properties_typeProperties_connectionString_secretName": {
+			"type": "string",
+			"defaultValue": "adfsecret"
 		}
 	},
 	"variables": {
@@ -17,25 +21,47 @@
 	},
 	"resources": [
 		{
-			"name": "[concat(parameters('factoryName'), '/ls_azurestorage')]",
+			"name": "[concat(parameters('factoryName'), '/ls_kv_data')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureKeyVault",
+				"typeProperties": {
+					"baseUrl": "[parameters('ls_kv_data_properties_typeProperties_baseUrl')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ls_azureblob_data')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"annotations": [],
 				"type": "AzureBlobStorage",
 				"typeProperties": {
-					"connectionString": "[parameters('ls_azurestorage_connectionString')]"
+					"connectionString": {
+						"type": "AzureKeyVaultSecret",
+						"store": {
+							"referenceName": "ls_kv_data",
+							"type": "LinkedServiceReference"
+						},
+						"secretName": "[parameters('ls_azureblob_data_properties_typeProperties_connectionString_secretName')]"
+					}
 				}
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_kv_data')]"
+			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/ds_sink_adf')]",
+			"name": "[concat(parameters('factoryName'), '/ds_sink_data')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
-					"referenceName": "ls_azurestorage",
+					"referenceName": "ls_azureblob_data",
 					"type": "LinkedServiceReference"
 				},
 				"annotations": [],
@@ -52,16 +78,16 @@
 				"schema": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/ls_azurestorage')]"
+				"[concat(variables('factoryId'), '/linkedServices/ls_azureblob_data')]"
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/ds_source_adf')]",
+			"name": "[concat(parameters('factoryName'), '/ds_sorce_data')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
-					"referenceName": "ls_azurestorage",
+					"referenceName": "ls_azureblob_data",
 					"type": "LinkedServiceReference"
 				},
 				"annotations": [],
@@ -89,7 +115,7 @@
 				]
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/ls_azurestorage')]"
+				"[concat(variables('factoryId'), '/linkedServices/ls_azureblob_data')]"
 			]
 		},
 		{
@@ -145,14 +171,14 @@
 						},
 						"inputs": [
 							{
-								"referenceName": "ds_source_adf",
+								"referenceName": "ds_sorce_data",
 								"type": "DatasetReference",
 								"parameters": {}
 							}
 						],
 						"outputs": [
 							{
-								"referenceName": "ds_sink_adf",
+								"referenceName": "ds_sink_data",
 								"type": "DatasetReference",
 								"parameters": {}
 							}
@@ -162,8 +188,8 @@
 				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/ds_source_adf')]",
-				"[concat(variables('factoryId'), '/datasets/ds_sink_adf')]"
+				"[concat(variables('factoryId'), '/datasets/ds_sorce_data')]",
+				"[concat(variables('factoryId'), '/datasets/ds_sink_data')]"
 			]
 		}
 	]

@@ -6,14 +6,6 @@
 			"type": "string",
 			"metadata": "Data Factory name",
 			"defaultValue": "adfdevdata"
-		},
-		"ls_azureblob_data_properties_typeProperties_connectionString_secretName": {
-			"type": "string",
-			"defaultValue": "adfsecret"
-		},
-		"ls_kv_data_properties_typeProperties_baseUrl": {
-			"type": "string",
-			"defaultValue": "https://adfkeyvaultdata.vault.azure.net/"
 		}
 	},
 	"variables": {
@@ -74,15 +66,13 @@
 						"inputs": [
 							{
 								"referenceName": "ds_sorce_data",
-								"type": "DatasetReference",
-								"parameters": {}
+								"type": "DatasetReference"
 							}
 						],
 						"outputs": [
 							{
 								"referenceName": "ds_sink_data",
-								"type": "DatasetReference",
-								"parameters": {}
+								"type": "DatasetReference"
 							}
 						]
 					}
@@ -171,7 +161,7 @@
 							"referenceName": "ls_kv_data",
 							"type": "LinkedServiceReference"
 						},
-						"secretName": "[parameters('ls_azureblob_data_properties_typeProperties_connectionString_secretName')]"
+						"secretName": "adfsecret"
 					}
 				}
 			},
@@ -187,7 +177,7 @@
 				"annotations": [],
 				"type": "AzureKeyVault",
 				"typeProperties": {
-					"baseUrl": "[parameters('ls_kv_data_properties_typeProperties_baseUrl')]"
+					"baseUrl": "https://adfkeyvaultdata.vault.azure.net/"
 				}
 			},
 			"dependsOn": []
