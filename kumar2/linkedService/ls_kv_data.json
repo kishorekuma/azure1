@@ -1,0 +1,10 @@
+{
+	"name": "ls_kv_data",
+	"properties": {
+		"annotations": [],
+		"type": "AzureKeyVault",
+		"typeProperties": {
+			"baseUrl": "https://adfkeyvaultdata.vault.azure.net/"
+		}
+	}
+}
