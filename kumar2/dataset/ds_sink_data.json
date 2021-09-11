@@ -1,0 +1,21 @@
+{
+	"name": "ds_sink_data",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_azureblob_data",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"container": "output"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}
